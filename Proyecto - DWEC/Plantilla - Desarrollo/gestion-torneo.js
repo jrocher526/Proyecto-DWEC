@@ -102,25 +102,122 @@ function generarEnfrentamientos() {
  * @param {number} goles2
  */
 function registrarResultado(partidoId, goles1, goles2) {
-  // TODO (Alumno 2):
-  // 1. Buscar el partido por partidoId en el array 'partidos'.
-  // 2. Validar que los goles sean números enteros >= 0.
-  // 3. Asignar goles1, goles2 y cambiar 'jugado' a true.
-}
 
+  // Buscamos el partido por su ID.
+  for (let i = 0; i < partidos.length; i++) {
+
+    if (partidos[i].id == partidoId) {
+
+      // Comprobamos que los goles sean números enteros y positivos.
+      if (!Number.isInteger(goles1) || !Number.isInteger(goles2) || goles1 < 0 || goles2 < 0) {
+        return;
+      }
+
+      // Guardamos los goles.
+      partidos[i].goles1 = goles1;
+      partidos[i].goles2 = goles2;
+
+      // Indicamos que el partido ya se ha jugado.
+      partidos[i].jugado = true;
+
+      return;
+    }
+  }
+}
 /**
  * Recorre 'equipos' y 'partidos' para calcular la tabla de posiciones.
  * @returns {Array} Array de objetos ordenado por Puntos (descendente) y Diferencia de Goles.
  */
 function calcularTablaPosiciones() {
-  // TODO (Alumno 2):
-  // 1. Mapear el array 'equipos' para inicializar estadísticas por equipo:
-  //    { id, nombre, pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, puntos: 0 }
-  // 2. Recorrer el array 'partidos' que estén 'jugados'.
-  // 3. Sumar PJ, GF, GC, PG/PE/PP y Puntos (3 ptos victoria, 1 pto empate).
-  // 4. Ordenar el array resultante por puntos (y secundariamente por GF - GC).
-  // 5. Retornar la lista calculada.
-  return [];
+
+  // Creamos las estadísticas de cada equipo.
+  let tabla = [];
+
+  for (let i = 0; i < equipos.length; i++) {
+
+    let equipo = {
+      id: equipos[i].id,
+      nombre: equipos[i].nombre,
+      pj: 0,
+      pg: 0,
+      pe: 0,
+      pp: 0,
+      gf: 0,
+      gc: 0,
+      puntos: 0
+    };
+
+    tabla.push(equipo);
+  }
+
+  // Recorremos todos los partidos.
+  for (let i = 0; i < partidos.length; i++) {
+
+    if (partidos[i].jugado == true) {
+
+      // Buscamos los dos equipos del partido.
+      let equipo1;
+      let equipo2;
+
+      for (let j = 0; j < tabla.length; j++) {
+
+        if (tabla[j].id == partidos[i].equipo1Id) {
+          equipo1 = tabla[j];
+        }
+
+        if (tabla[j].id == partidos[i].equipo2Id) {
+          equipo2 = tabla[j];
+        }
+      }
+
+      // Sumamos partidos jugados.
+      equipo1.pj++;
+      equipo2.pj++;
+
+      // Sumamos goles a favor y en contra.
+      equipo1.gf += partidos[i].goles1;
+      equipo1.gc += partidos[i].goles2;
+
+      equipo2.gf += partidos[i].goles2;
+      equipo2.gc += partidos[i].goles1;
+
+      // Comprobamos quién ha ganado o si han empatado.
+      if (partidos[i].goles1 > partidos[i].goles2) {
+
+        equipo1.pg++;
+        equipo2.pp++;
+
+        equipo1.puntos += 3;
+
+      } else if (partidos[i].goles1 < partidos[i].goles2) {
+
+        equipo2.pg++;
+        equipo1.pp++;
+
+        equipo2.puntos += 3;
+
+      } else {
+
+        equipo1.pe++;
+        equipo2.pe++;
+
+        equipo1.puntos++;
+        equipo2.puntos++;
+      }
+    }
+  }
+
+  // Ordenamos por puntos y después por diferencia de goles.
+  tabla.sort(function(a, b) {
+
+    if (b.puntos != a.puntos) {
+      return b.puntos - a.puntos;
+    }
+
+    return (b.gf - b.gc) - (a.gf - a.gc);
+  });
+
+  return tabla;
 }
 
 // ==========================================
