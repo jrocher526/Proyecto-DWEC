@@ -151,9 +151,34 @@ function pintarPartidos() {
  * Renderiza las filas <tr> de la tabla de clasificación.
  */
 function pintarTablaClasificacion() {
-  // TODO (Alumno 3):
   // 1. Llamar a calcularTablaPosiciones() (Función del Alumno 2).
+  const posiciones = calcularTablaPosiciones();
+
   // 2. Obtener #tablaClasificacion y construir los <tr> y <td> con los datos.
+  const contenedor = document.getElementById("tablaClasificacion");
+  if (!contenedor) return;
+
+  // Limpiar contenido previo
+  contenedor.innerHTML = "";
+
+  // Recorrer las posiciones ordenadas y generar las filas
+  posiciones.forEach((equipo, index) => {
+    const fila = document.createElement("tr");
+
+    fila.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${equipo.nombre}</td>
+      <td>${equipo.pj}</td>
+      <td>${equipo.pg}</td>
+      <td>${equipo.pe}</td>
+      <td>${equipo.pp}</td>
+      <td>${equipo.gf}</td>
+      <td>${equipo.gc}</td>
+      <td><b>${equipo.puntos}</b></td>
+    `;
+
+    contenedor.appendChild(fila);
+  });
 }
 
 // ==========================================
@@ -165,11 +190,34 @@ function pintarTablaClasificacion() {
  * @returns {Object} { totalGoles: number, maxGoleador: string }
  */
 function obtenerEstadisticas() {
-  // TODO (Alumno 4):
   // 1. Recorrer 'partidos' para sumar los goles totales del torneo.
+  let totalGoles = 0;
+  partidos.forEach(partido => {
+    if (partido.jugado && partido.goles1 !== null && partido.goles2 !== null) {
+      totalGoles += partido.goles1 + partido.goles2;
+    }
+  });
+
   // 2. Usar la tabla de posiciones de Alumno 2 para buscar el equipo con mayor GF (Goles a Favor).
+  let maxGoleador = "-";
+  const tabla = calcularTablaPosiciones();
+
+  if (tabla.length > 0) {
+    let maxGf = -1;
+    tabla.forEach(equipo => {
+      if (equipo.gf > maxGf) {
+        maxGf = equipo.gf;
+        maxGoleador = equipo.nombre;
+      }
+    });
+    // Si nadie ha marcado goles todavía, se mantiene "-"
+    if (maxGf === 0) {
+      maxGoleador = "-";
+    }
+  }
+
   // 3. Retornar el objeto con los datos.
-  return { totalGoles: 0, maxGoleador: "-" };
+  return { totalGoles, maxGoleador };
 }
 
 /**
