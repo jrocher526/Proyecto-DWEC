@@ -228,20 +228,78 @@ function calcularTablaPosiciones() {
  * Renderiza el listado simple de equipos registrados.
  */
 function pintarListaEquipos() {
-  // TODO (Alumno 3):
-  // 1. Obtener el elemento HTML #listaEquipos.
-  // 2. Limpiar su contenido.
-  // 3. Recorrer 'equipos' y renderizar un <li> por cada equipo.
+  const lista = document.getElementById("listaEquipos");
+
+  // Limpiar la lista
+  lista.innerHTML = "";
+
+  // Recorrer los equipos
+  equipos.forEach(function(equipo) {
+    const li = document.createElement("li");
+    li.textContent = equipo.nombre;
+    lista.appendChild(li);
+  });
 }
 
 /**
  * Renderiza los partidos programados con sus inputs de goles y botón de guardar.
  */
 function pintarPartidos() {
-  // TODO (Alumno 3):
-  // 1. Obtener el contenedor #contenedorPartidos.
-  // 2. Limpiar su contenido.
-  // 3. Recorrer 'partidos' generando controles para ingresar resultado y guardar.
+  const contenedor = document.getElementById("contenedorPartidos");
+
+  // Limpiar el contenedor
+  contenedor.innerHTML = "";
+
+  // Recorrer los partidos
+  partidos.forEach(function(partido) {
+    const equipo1 = equipos.find(e => e.id === partido.equipo1Id);
+    const equipo2 = equipos.find(e => e.id === partido.equipo2Id);
+
+    const div = document.createElement("div");
+
+    // Mostrar nombres de los equipos
+    const titulo = document.createElement("p");
+    titulo.textContent = equipo1.nombre + " - " + equipo2.nombre;
+    div.appendChild(titulo);
+
+    // Input para los goles del equipo 1
+    const input1 = document.createElement("input");
+    input1.type = "number";
+    input1.min = "0";
+    input1.id = "goles1_" + partido.id;
+    input1.placeholder = "Goles equipo 1";
+
+    // Input para los goles del equipo 2
+    const input2 = document.createElement("input");
+    input2.type = "number";
+    input2.min = "0";
+    input2.id = "goles2_" + partido.id;
+    input2.placeholder = "Goles equipo 2";
+
+    // Si el partido ya se ha jugado, mostrar el resultado
+    if (partido.jugado) {
+      input1.value = partido.goles1;
+      input2.value = partido.goles2;
+    }
+
+    div.appendChild(input1);
+    div.appendChild(input2);
+
+    // Botón para guardar el resultado
+    const boton = document.createElement("button");
+    boton.textContent = "Guardar resultado";
+
+    boton.onclick = function() {
+      handlerGuardarResultado(
+          partido.id,
+          input1.id,
+          input2.id
+      );
+    };
+
+    div.appendChild(boton);
+    contenedor.appendChild(div);
+  });
 }
 
 /**
