@@ -1,0 +1,202 @@
+  <!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <script charset="UTF-8" src="gestion-torneo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestor de Torneo Deportivo</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --bg: #f8fafc;
+        --card: #ffffff;
+        --text: #1e293b;
+        --border: #e2e8f0;
+      }
+
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: var(--primary);
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      .form-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      input,
+      button {
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        flex: 1;
+      }
+
+      button {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: var(--primary-dark);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--border);
+        padding: 8px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #f1f5f9;
+      }
+
+      .partido-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px;
+        border-bottom: 1px solid var(--border);
+        gap: 10px;
+      }
+
+      .partido-item input {
+        width: 50px;
+        text-align: center;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      li {
+        padding: 6px 0;
+        border-bottom: 1px solid var(--border);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🏆 Gestor de Torneos Express</h1>
+
+    <div class="container">
+      <!-- SECCIÓN 1: REGISTRO DE EQUIPOS -->
+      <div class="card">
+        <h2>1. Registrar Equipos</h2>
+        <div class="form-group">
+          <input type="text" id="inputEquipo" placeholder="Nombre del equipo" />
+          <button onclick="handlerAgregarEquipo()">Añadir</button>
+        </div>
+        <button onclick="handlerGenerarTorneo()" style="width: 100%">
+          ⚡ Generar Enfrontamientos
+        </button>
+
+        <h3>Equipos Inscritos:</h3>
+        <ul id="listaEquipos">
+          <!-- Se llena mediante JS (Alumno 3) -->
+        </ul>
+      </div>
+
+      <!-- SECCIÓN 2: CALENDARIO Y RESULTADOS -->
+      <div class="card">
+        <h2>2. Partidos y Resultados</h2>
+        <div id="contenedorPartidos">
+          <!-- Se llena mediante JS (Alumno 3) -->
+          <p>Añade equipos y genera el torneo para ver los partidos.</p>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 3: CLASIFICACIÓN -->
+      <div class="card full-width">
+        <h2>3. Tabla de Clasificación</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Posición</th>
+              <th>Equipo</th>
+              <th>PJ</th>
+              <th>PG</th>
+              <th>PE</th>
+              <th>PP</th>
+              <th>GF</th>
+              <th>GC</th>
+              <th>Puntos</th>
+            </tr>
+          </thead>
+          <tbody id="tablaClasificacion">
+            <!-- Se llena mediante JS (Alumno 3) -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SECCIÓN 4: ESTADÍSTICAS Y CONTROL -->
+      <div class="card full-width">
+        <h2>4. Panel de Control y Estadísticas</h2>
+        <div id="panelEstadisticas">
+          <p>
+            <b>Estado del torneo:</b>
+            <span id="txtEstado">Esperando equipos...</span>
+          </p>
+          <p>
+            <b>Total de goles anotados:</b> <span id="txtTotalGoles">0</span>
+          </p>
+          <p><b>Equipo más goleador:</b> <span id="txtMaxGoleador">-</span></p>
+        </div>
+        <button
+          onclick="handlerReiniciarTorneo()"
+          style="background-color: #ef4444"
+        >
+          🔴 Reiniciar Todo
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
