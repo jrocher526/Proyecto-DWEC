@@ -321,10 +321,26 @@ function obtenerEstadisticas() {
  * Limpia las variables globales y refresca toda la interfaz a su estado inicial.
  */
 function reiniciarTorneo() {
-  // TODO (Alumno 4):
-  // 1. Vaciar arrays: equipos = []; partidos = [];
-  // 2. Volver a pintar todas las secciones (usando funciones de Alumno 3).
-  // 3. Actualizar panel de estadísticas a 0.
+  // Vaciar datos
+  equipos = [];
+  partidos = [];
+
+  // Limpiar listas y tablas
+  document.getElementById("listaEquipos").innerHTML = "";
+  document.getElementById("contenedorPartidos").innerHTML =
+      "<p>Añade equipos y genera el torneo para ver los partidos.</p>";
+
+  document.getElementById("tablaClasificacion").innerHTML = "";
+
+  // Reiniciar estadísticas
+  document.getElementById("txtEstado").textContent =
+      "Esperando equipos...";
+
+  document.getElementById("txtTotalGoles").textContent = "0";
+  document.getElementById("txtMaxGoleador").textContent = "-";
+
+  // Limpiar campo de entrada
+  document.getElementById("inputEquipo").value = "";
 }
 
 // ==========================================
