@@ -277,7 +277,36 @@ function pintarTablaClasificacion() {
     contenedor.appendChild(fila);
   });
 }
+function obtenerEstadisticas() {
+  // 1. Recorrer 'partidos' para sumar los goles totales del torneo.
+  let totalGoles = 0;
+  partidos.forEach(partido => {
+    if (partido.jugado && partido.goles1 !== null && partido.goles2 !== null) {
+      totalGoles += partido.goles1 + partido.goles2;
+    }
+  });
 
+  // 2. Usar la tabla de posiciones de Alumno 2 para buscar el equipo con mayor GF (Goles a Favor).
+  let maxGoleador = "-";
+  const tabla = calcularTablaPosiciones();
+
+  if (tabla.length > 0) {
+    let maxGf = -1;
+    tabla.forEach(equipo => {
+      if (equipo.gf > maxGf) {
+        maxGf = equipo.gf;
+        maxGoleador = equipo.nombre;
+      }
+    });
+    // Si nadie ha marcado goles todavía, se mantiene "-"
+    if (maxGf === 0) {
+      maxGoleador = "-";
+    }
+  }
+
+  // 3. Retornar el objeto con los datos.
+  return { totalGoles, maxGoleador };
+}
 // ==========================================
 // ALUMNO 4: ESTADÍSTICAS Y CONTROL GENERAL
 // ==========================================
